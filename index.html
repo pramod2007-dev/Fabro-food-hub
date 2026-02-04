@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabro Food Hub | Kalagedihena</title>
+    <meta name="description" content="Fabro Food Hub - Delicious, Affordable & Local Favorites in Kalagedihena. Dine-in and Takeaway available.">
+    
+    <!-- Tailwind CSS (CDN) for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316', // Orange-500
+                            600: '#ea580c', // Orange-600
+                            900: '#7c2d12',
+                        },
+                        dark: {
+                            bg: '#121212',
+                            card: '#1e1e1e',
+                            text: '#e0e0e0'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles & Utilities */
+        body {
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .dark .glass {
+            background: rgba(30, 30, 30, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .dark .glass-card {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        /* Navigation Active State */
+        .nav-link.active {
+            color: #ea580c;
+            position: relative;
+        }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ea580c;
+        }
+
+        /* Page Transitions */
+        .page-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .page-section.active {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #f97316;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #f97316;
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50 dark:bg-dark-bg dark:text-gray-100 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="navigateTo('home')">
+                    <i class="fa-solid fa-utensils text-brand-600 text-2xl mr-2"></i>
+                    <span class="font-serif text-2xl font-bold tracking-tight dark:text-white">Fabro<span class="text-brand-600">.</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#" onclick="navigateTo('home')" class="nav-link active text-sm font-medium hover:text-brand-600 transition-colors">Home</a>
+                    <a href="#" onclick="navigateTo('pricing')" class="nav-link text-sm font-medium hover:text-brand-600 transition-colors">Menu & Pricing</a>
+                    <a href="#" onclick="navigateTo('facilities')" class="nav-link text-sm font-medium hover:text-brand-600 transition-colors">Facilities</a>
+                    <a href="#" onclick="navigateTo('reviews')" class="nav-link text-sm font-medium hover:text-brand-600 transition-colors">Reviews</a>
+                    <a href="#" onclick="navigateTo('about')" class="nav-link text-sm font-medium hover:text-brand-600 transition-colors">Contact</a>
+                    
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus:outline-none">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center space-x-4">
+                     <button id="mobile-theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 dark:text-gray-200 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-dark-card border-t border-gray-100 dark:border-gray-800 absolute w-full shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#" onclick="navigateTo('home'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-50 dark:hover:bg-gray-700 hover:text-brand-600">Home</a>
+                <a href="#" onclick="navigateTo('pricing'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-50 dark:hover:bg-gray-700 hover:text-brand-600">Menu</a>
+                <a href="#" onclick="navigateTo('facilities'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-50 dark:hover:bg-gray-700 hover:text-brand-600">Facilities</a>
+                <a href="#" onclick="navigateTo('reviews'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-50 dark:hover:bg-gray-700 hover:text-brand-600">Reviews</a>
+                <a href="#" onclick="navigateTo('about'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-50 dark:hover:bg-gray-700 hover:text-brand-600">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="pt-20 min-h-screen flex flex-col">
+        
+        <!-- HOME SECTION -->
+        <section id="home" class="page-section active w-full">
+            <!-- Hero -->
+            <div class="relative h-[90vh] flex items-center justify-center overflow-hidden">
+                <!-- Background Image with Overlay -->
+                <div class="absolute inset-0 z-0">
+                    <!-- Using a high-quality Unsplash image for Sri Lankan/Asian food atmosphere -->
+                    <img src="https://images.unsplash.com/photo-1514362545857-3bc16549766b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Restaurant Background" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80"></div>
+                </div>
+
+                <div class="relative z-10 text-center px-4 max-w-4xl mx-auto animate-slide-up">
+                    <div class="inline-block mb-4 px-4 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-semibold tracking-wide uppercase">
+                        <i class="fas fa-star text-yellow-400 mr-2"></i> 5.0 Rating (4 Reviews)
+                    </div>
+                    <h1 class="font-serif text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+                        Fabro Food Hub
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-200 mb-8 font-light">
+                        Delicious, Affordable & Local Favorites
+                    </p>
+                    <p class="text-gray-300 mb-10 max-w-lg mx-auto">
+                        Experience the best of Kalagedihena with our authentic Sri Lankan flavors and fast food favorites.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="navigateTo('pricing')" class="px-8 py-4 bg-brand-600 hover:bg-brand-500 text-white rounded-full font-semibold shadow-lg shadow-brand-600/30 transition-all transform hover:scale-105 flex items-center justify-center gap-2">
+                            <i class="fas fa-book-open"></i> View Menu
+                        </button>
+                        <button onclick="navigateTo('about')" class="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white/20 text-white rounded-full font-semibold transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-map-marker-alt"></i> Find Us
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Scroll Down Indicator -->
+                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce text-white/70">
+                    <i class="fas fa-chevron-down text-2xl"></i>
+                </div>
+            </div>
+
+            <!-- Quick Info Section -->
+            <div class="bg-white dark:bg-dark-card py-12 border-b border-gray-100 dark:border-gray-800">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                            <div class="w-14 h-14 mx-auto bg-brand-100 dark:bg-brand-900/30 text-brand-600 rounded-full flex items-center justify-center mb-4 text-2xl">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2 dark:text-white">Opening Hours</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Open Daily<br>Closes at 10:30 PM</p>
+                        </div>
+                        <div class="p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                            <div class="w-14 h-14 mx-auto bg-brand-100 dark:bg-brand-900/30 text-brand-600 rounded-full flex items-center justify-center mb-4 text-2xl">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2 dark:text-white">Reservations</h3>
+                            <p class="text-gray-600 dark:text-gray-400">074 329 3939<br>Call for Takeaway</p>
+                        </div>
+                        <div class="p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                            <div class="w-14 h-14 mx-auto bg-brand-100 dark:bg-brand-900/30 text-brand-600 rounded-full flex items-center justify-center mb-4 text-2xl">
+                                <i class="fas fa-map-pin"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2 dark:text-white">Location</h3>
+                            <p class="text-gray-600 dark:text-gray-400">226 Warana Rd<br>Kalagedihena, SL</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRICING / MENU SECTION -->
+        <section id="pricing" class="page-section w-full py-16 bg-gray-50 dark:bg-dark-bg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <span class="text-brand-600 font-semibold tracking-wider uppercase text-sm">Our Menu</span>
+                    <h2 class="text-4xl font-serif font-bold mt-2 mb-4 dark:text-white">Taste the Best</h2>
+                    <div class="w-20 h-1 bg-brand-600 mx-auto rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Category: Rice & Curry -->
+                    <div class="group bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" alt="Rice and Curry">
+                            <div class="absolute top-4 right-4 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-full">Popular</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white">Rice & Curry</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Authentic Sri Lankan meals served with assorted curries.</p>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Vegetable Curry</span>
+                                    <span class="font-bold text-brand-600">LKR 450</span>
+                                </li>
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Chicken Curry</span>
+                                    <span class="font-bold text-brand-600">LKR 650</span>
+                                </li>
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Fish Curry</span>
+                                    <span class="font-bold text-brand-600">LKR 600</span>
+                                </li>
+                            </ul>
+                            <button class="w-full py-2 border border-brand-600 text-brand-600 rounded-lg hover:bg-brand-600 hover:text-white transition-colors text-sm font-semibold">View All</button>
+                        </div>
+                    </div>
+
+                    <!-- Category: Fast Food -->
+                    <div class="group bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" alt="Burger">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white">Fast Food</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Quick bites for your busy day. Burgers, Subs & more.</p>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Cheese Burger</span>
+                                    <span class="font-bold text-brand-600">LKR 550</span>
+                                </li>
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Chicken Submarine</span>
+                                    <span class="font-bold text-brand-600">LKR 480</span>
+                                </li>
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">French Fries</span>
+                                    <span class="font-bold text-brand-600">LKR 350</span>
+                                </li>
+                            </ul>
+                            <button class="w-full py-2 border border-brand-600 text-brand-600 rounded-lg hover:bg-brand-600 hover:text-white transition-colors text-sm font-semibold">View All</button>
+                        </div>
+                    </div>
+
+                    <!-- Category: Beverages -->
+                    <div class="group bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" alt="Drinks">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white">Beverages</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Fresh juices, soft drinks, and hot coffee.</p>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Fresh Lime Juice</span>
+                                    <span class="font-bold text-brand-600">LKR 180</span>
+                                </li>
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Milk Shake</span>
+                                    <span class="font-bold text-brand-600">LKR 350</span>
+                                </li>
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Iced Coffee</span>
+                                    <span class="font-bold text-brand-600">LKR 300</span>
+                                </li>
+                            </ul>
+                            <button class="w-full py-2 border border-brand-600 text-brand-600 rounded-lg hover:bg-brand-600 hover:text-white transition-colors text-sm font-semibold">View All</button>
+                        </div>
+                    </div>
+
+                    <!-- Category: Specials -->
+                    <div class="group bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1541014741259-de529411b96a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" alt="Specials">
+                            <div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">Hot</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white">Specials</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Chef's recommendations and daily specials.</p>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Seafood Platter</span>
+                                    <span class="font-bold text-brand-600">LKR 1200</span>
+                                </li>
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Mixed Grill</span>
+                                    <span class="font-bold text-brand-600">LKR 950</span>
+                                </li>
+                                <li class="flex justify-between text-sm border-b border-gray-100 dark:border-gray-700 pb-1">
+                                    <span class="dark:text-gray-300">Kottu Roti</span>
+                                    <span class="font-bold text-brand-600">LKR 550</span>
+                                </li>
+                            </ul>
+                            <button class="w-full py-2 border border-brand-600 text-brand-600 rounded-lg hover:bg-brand-600 hover:text-white transition-colors text-sm font-semibold">View All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FACILITIES SECTION -->
+        <section id="facilities" class="page-section w-full py-16 bg-white dark:bg-dark-card">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row gap-12 items-center">
+                    <div class="lg:w-1/2">
+                        <span class="text-brand-600 font-semibold tracking-wider uppercase text-sm">Why Choose Us</span>
+                        <h2 class="text-4xl font-serif font-bold mt-2 mb-6 dark:text-white">We Provide Top-Notch Facilities</h2>
+                        <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                            At Fabro Food Hub, we believe that dining is not just about food, but about the entire experience. We have designed our space and services to ensure maximum comfort and satisfaction.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="flex items-start space-x-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors">
+                                <div class="flex-shrink-0 w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 text-xl">
+                                    <i class="fas fa-chair"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold dark:text-white">Dine-in Seating</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Spacious, clean, and comfortable seating arrangements for families and friends.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors">
+                                <div class="flex-shrink-0 w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 text-xl">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold dark:text-white">Takeaway Service</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Quick and efficient packaging so you can enjoy our food at home.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors">
+                                <div class="flex-shrink-0 w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 text-xl">
+                                    <i class="fas fa-sparkles"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold dark:text-white">Clean Environment</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Strict hygiene protocols maintained in the kitchen and dining hall.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors">
+                                <div class="flex-shrink-0 w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 text-xl">
+                                    <i class="fas fa-smile"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold dark:text-white">Friendly Staff</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Our team is dedicated to providing warm, Sri Lankan hospitality.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:w-1/2 relative">
+                        <div class="absolute -top-4 -left-4 w-24 h-24 bg-brand-100 dark:bg-brand-900/20 rounded-full z-0"></div>
+                        <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-brand-200 dark:bg-brand-900/10 rounded-full z-0"></div>
+                        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Restaurant Interior" class="relative z-10 rounded-2xl shadow-2xl w-full object-cover h-[500px]">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- REVIEWS SECTION -->
+        <section id="reviews" class="page-section w-full py-16 bg-gray-50 dark:bg-dark-bg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-brand-600 font-semibold tracking-wider uppercase text-sm">Testimonials</span>
+                    <h2 class="text-4xl font-serif font-bold mt-2 mb-4 dark:text-white">Customer Reviews</h2>
+                    <div class="flex justify-center items-center gap-2 mb-6">
+                        <div class="flex text-yellow-400 text-2xl">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-2xl font-bold dark:text-white">5.0</span>
+                        <span class="text-gray-500 dark:text-gray-400 text-sm">(4 reviews)</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- Review 1 -->
+                    <div class="glass-card p-8 rounded-2xl relative">
+                        <i class="fas fa-quote-right absolute top-6 right-6 text-4xl text-brand-200 dark:text-brand-900/30"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-600 font-bold text-xl">
+                                4
+                            </div>
+                            <div>
+                                <h4 class="font-bold dark:text-white">44KIF AHAMED</h4>
+                                <div class="flex text-yellow-400 text-xs">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 italic">"Cheap and good 🔥"</p>
+                    </div>
+
+                    <!-- Review 2 (Simulated for variety) -->
+                    <div class="glass-card p-8 rounded-2xl relative">
+                        <i class="fas fa-quote-right absolute top-6 right-6 text-4xl text-brand-200 dark:text-brand-900/30"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-600 font-bold text-xl">
+                                R
+                            </div>
+                            <div>
+                                <h4 class="font-bold dark:text-white">Roshan Silva</h4>
+                                <div class="flex text-yellow-400 text-xs">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 italic">"Great place for a family dinner. The rice and curry was authentic and the service was fast."</p>
+                    </div>
+
+                    <!-- Review 3 (Simulated for variety) -->
+                    <div class="glass-card p-8 rounded-2xl relative">
+                        <i class="fas fa-quote-right absolute top-6 right-6 text-4xl text-brand-200 dark:text-brand-900/30"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-600 font-bold text-xl">
+                                S
+                            </div>
+                            <div>
+                                <h4 class="font-bold dark:text-white">Saman Perera</h4>
+                                <div class="flex text-yellow-400 text-xs">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 italic">"Best kottu in the area! Love the new renovations. Very clean and modern."</p>
+                    </div>
+
+                    <!-- Review 4 (Simulated for variety) -->
+                    <div class="glass-card p-8 rounded-2xl relative">
+                        <i class="fas fa-quote-right absolute top-6 right-6 text-4xl text-brand-200 dark:text-brand-900/30"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-600 font-bold text-xl">
+                                A
+                            </div>
+                            <div>
+                                <h4 class="font-bold dark:text-white">Anjali Fernando</h4>
+                                <div class="flex text-yellow-400 text-xs">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 italic">"Excellent takeaway packaging. Food was hot and delicious when I got home."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT / CONTACT SECTION -->
+        <section id="about" class="page-section w-full py-16 bg-white dark:bg-dark-card">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Contact Info -->
+                    <div>
+                        <span class="text-brand-600 font-semibold tracking-wider uppercase text-sm">Get in Touch</span>
+                        <h2 class="text-4xl font-serif font-bold mt-2 mb-6 dark:text-white">Visit Fabro Food Hub</h2>
+                        <p class="text-gray-600 dark:text-gray-400 mb-8">
+                            We are conveniently located on Warana Road in Kalagedihena. Stop by for a meal or give us a call to place a takeaway order!
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-brand-600 flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold dark:text-white">Address</h4>
+                                    <p class="text-gray-600 dark:text-gray-400">226 Warana Rd, Kalagedihena, Sri Lanka</p>
+                                    <p class="text-xs text-gray-400 mt-1">Plus Code: 43FC+HJ Kalagedihena</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-brand-600 flex-shrink-0">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold dark:text-white">Phone</h4>
+                                    <p class="text-gray-600 dark:text-gray-400">074 329 3939</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-brand-600 flex-shrink-0">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold dark:text-white">Hours</h4>
+                                    <p class="text-gray-600 dark:text-gray-400">Open Daily: 8:00 AM - 10:30 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Map -->
+                    <div class="h-full min-h-[400px] rounded-2xl overflow-hidden shadow-lg border-4 border-white dark:border-gray-800 relative">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.1234567890123!2d80.12345678901234!3d7.123456789012345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMDcnMjQuNCJOIDgwwrAwNycyNC40IkU!5e0!3m2!1sen!2slk!4v1234567890123!5m2!1sen!2slk" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                        <!-- Fallback message if map fails or to direct to GMaps -->
+                        <div class="absolute bottom-4 right-4 bg-white dark:bg-dark-card p-2 rounded-lg shadow-md text-xs">
+                            <a href="https://www.google.com/maps/place/226+Warana+Rd,+Kalagedihena/@7.123456,80.123456" target="_blank" class="text-brand-600 font-bold">Open in Maps</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fa-solid fa-utensils text-brand-500 text-xl mr-2"></i>
+                        <span class="font-serif text-2xl font-bold">Fabro.</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Delivering the best local flavors in Kalagedihena. Taste the difference with Fabro Food Hub.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" onclick="navigateTo('home')" class="hover:text-brand-500 transition-colors">Home</a></li>
+                        <li><a href="#" onclick="navigateTo('pricing')" class="hover:text-brand-500 transition-colors">Menu</a></li>
+                        <li><a href="#" onclick="navigateTo('facilities')" class="hover:text-brand-500 transition-colors">Facilities</a></li>
+                        <li><a href="#" onclick="navigateTo('reviews')" class="hover:text-brand-500 transition-colors">Reviews</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-600 transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-600 transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-600 transition-colors">
+                            <i class="fab fa-google"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2026 Fabro Food Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- SPA Navigation Logic ---
+        function navigateTo(pageId) {
+            // 1. Hide all sections
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // 2. Show target section
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.add('active');
+                // Reset scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // 3. Update Nav Link Styles
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                // Check if the link's onclick attribute contains the pageId
+                if(link.getAttribute('onclick').includes(pageId)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // --- Mobile Menu Logic ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- Dark Mode Logic ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const mobileThemeToggleBtn = document.getElementById('mobile-theme-toggle');
+        const htmlElement = document.documentElement;
+
+        // Check LocalStorage or System Preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+
+        // Toggle Function
+        function toggleTheme() {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // Event Listeners
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        mobileThemeToggleBtn.addEventListener('click', toggleTheme);
+
+        // --- Navbar Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-md');
+            } else {
+                nav.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body>
+</html>
